@@ -42,28 +42,20 @@ function App() {
       .then(resp => setItems(resp.data))
   }, []);
 
-  // function addInCart(obj) {
-  //     axios.get('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart').then(resp =>{
-  //       if(!resp.data.filter(item => item.imageUrl === obj.imageUrl).length > 0){
-  //         axios.post('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart',obj);
-  //         setCartItems([...resp.data,obj])
-  //       }
-  //     })
-  // }
 
   function addInCart(obj) {
     axios.post('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart',obj)
-    // .then(() =>axios.get('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart').then(resp =>setCartItems(resp.data)))
+    .then(() =>axios.get('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart').then(resp =>setCartItems(resp.data)))
   }
 
-  function removeFromCart(obj){
+  function removeFromCart(obj){ // Функция рабочая 
       axios.get('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart').then(resp => {
         let id = resp.data.filter(item => item.imageUrl === obj.imageUrl)[0].id
       axios.delete(`https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`)
     }
   )
 }
-  // function removeFromCart(obj){
+  // function removeFromCart(obj){ // Не рабочая 
   //   console.log(cartItems)
   //     let id =cartItems.filter(item =>item.imageUrl == obj.imageUrl)[0].id
   //     console.log(id)
