@@ -1,0 +1,41 @@
+.item{
+    width: 210px;
+    height: 260px;
+    background: #FFFFFF;
+    border: 1px solid #F3F3F3;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    position: relative;
+    margin-top: 40px;
+    transition: box-shadow 0.2s ease-in-out, transform 0.15s ease-in-out;
+    .title{
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+        color: #000000;
+        max-width: 150px;
+    }
+    &:hover{
+      box-shadow: 0px 14px 30px rgba(0, 0, 0, 0.05);
+      transform: translateY(-5px);
+    }
+    .favorite{
+      position: absolute;
+      left: 31px;
+      cursor: pointer;
+      top: 23px;
+    }
+
+    .contentPrice{
+      display: flex;
+      width: 151px;
+      justify-content: space-between;
+      margin-bottom: 34px;
+      .btnAdd{
+        cursor: pointer;
+      }
+    }
+}
