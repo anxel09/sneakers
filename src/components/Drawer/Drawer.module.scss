@@ -30,6 +30,51 @@
           }
         }
       }
+      .emptyCart{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        h3{
+          font-size: 22px;
+          line-height: 27px;
+        }
+        p{
+          text-align: center;
+          color: #000000;
+          opacity: 0.4;
+          font-weight: 400;
+          line-height: 24px;
+          max-width: 285px;
+        }
+        button{
+          margin-top: 40px;
+          width: 245px;
+          height: 55px;
+          cursor: pointer;
+          color: #FFFFFF;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 19px;
+          background: #9DD458;
+          border-radius: 18px;
+          position: relative;
+          &:hover{
+            background: lighten($color: #9DD558, $amount: 3%);
+          }
+          &::before{
+            content: url('../../../public/img/left-arrow.png');
+            left: 25px;
+            top: 19px;
+            position: absolute;
+            transition: all 0.18s ease-in-out;
+            
+          }
+          &:hover::before{
+            left: 15px;
+          }
+        }
+      }
       .drawerItems{
         display: flex;
         align-items: center;

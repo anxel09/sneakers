@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Route,Routes,BrowserRouter } from "react-router-dom";
 import Card from "./components/Card";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
@@ -36,34 +37,31 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [isCart, setIsCart] = useState(false);
   const [changeInput, setChangeInput] = useState('');
+  const [itemId,setId] = useState(1);
 
   useEffect(() => {
     axios.get("https://62b9cbe5ff109cd1dc9b5328.mockapi.io/items")
       .then(resp => setItems(resp.data))
   }, []);
 
+  useEffect(() => {
+    console.log(cartItems);
+  }, [cartItems]);
 
-  function addInCart(obj) {
-    axios.post('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart',obj)
-    .then(() =>axios.get('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart').then(resp =>setCartItems(resp.data)))
-  }
 
-  function removeFromCart(obj){ // Функция рабочая 
-      axios.get('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart').then(resp => {
-        let id = resp.data.filter(item => item.imageUrl === obj.imageUrl)[0].id
-      axios.delete(`https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`)
+  async function addInCart(obj) {
+    obj.id = itemId
+    const {data} = await axios.post('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart',obj)
+    setId(itemId+1)
+    setCartItems(prev => [...prev,data])
     }
-  )
-}
-  // function removeFromCart(obj){ // Не рабочая 
-  //   console.log(cartItems)
-  //     let id =cartItems.filter(item =>item.imageUrl == obj.imageUrl)[0].id
-  //     console.log(id)
-  //     axios.delete(`https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`)
-  //   }
+  
+  async function removeFromCart(obj){
+      const id = cartItems.filter(item =>item.imageUrl === obj.imageUrl)[0].id
+      await axios.delete(`https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`)
+      setCartItems(prev => prev.filter(item=> item.id !== id))
+    }
  
-
-
   function onChangeSearch(event){
     setChangeInput(event.target.value)
   }
@@ -78,7 +76,17 @@ function App() {
       {isCart ? (
         <Drawer onClickClose={() => setIsCart(false)} />
       ) : null}
+      <BrowserRouter>
+      
+        <Routes>
 
+          <Route path="/test" element='qwe'>
+          </Route>
+
+        </Routes>
+
+      </BrowserRouter>
+      
       <div className="content">
         <div className="content-top">
           <h1>{changeInput ? `Данные по запросу: '${changeInput}'`: 'Все кроссовки'}</h1>
