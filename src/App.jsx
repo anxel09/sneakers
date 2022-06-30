@@ -39,6 +39,7 @@ function App() {
   const [itemCartId, SetItemCartId] = useState(1);
   const [favoriteId, SetFavoriteId] = useState(1);
   const [favoriteList, setFavoriteList] = useState([])
+  const [addState, setAddState] = useState([])
 
   useEffect(() => {
     axios
@@ -46,6 +47,8 @@ function App() {
       .then((resp) => setItems(resp.data));
     axios.get("https://62b9cbe5ff109cd1dc9b5328.mockapi.io/favorite")
       .then((resp)=> setFavoriteList(resp.data))
+      axios.get('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart')
+        .then(resp => setCartItems(resp.data))
   }, []);
 
   // useEffect(()=>{
@@ -53,6 +56,7 @@ function App() {
   // },[favoriteList])
 
   async function addInCart(obj) {
+    console.log(obj)
     obj.id = itemCartId;
     const { data } = await axios.post(
       "https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart",
@@ -63,11 +67,15 @@ function App() {
   }
 
   async function removeFromCart(obj) {
-    const id = cartItems.filter((item) => item.imageUrl === obj.imageUrl)[0].id;
-    await axios.delete(
-      `https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`
-    );
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    try{
+      const id = cartItems.filter((item) => item.imageUrl === obj.imageUrl)[0].id;
+      await axios.delete(
+        `https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`
+      );
+      setCartItems((prev) => prev.filter((item) => item.id !== id));
+    }catch(error){
+      console.log(cartItems.filter((item) => item.imageUrl === obj.imageUrl))
+    }
   }
 
   function onChangeSearch(event) {
@@ -115,6 +123,10 @@ function App() {
               onAddInFavorite={(item)=> onAddInFavorite(item)}
               onRemoveFavorite = {(obj) => onRemoveFavorite(obj)}
               favoriteList = {favoriteList}
+              cartItems = {cartItems}
+              setCartItems ={(data)=>setCartItems(data)}
+              addState ={addState}
+              setAddState = {(state)=>setAddState(state)}
             />
           }
         >
@@ -123,7 +135,8 @@ function App() {
         <Route path="/favorite" element={<Favorite
           favoriteList = {favoriteList}
           addInCart={addInCart}
-          removeFromCart={removeFromCart}
+          cartItems ={cartItems}
+          removeFromCart={(obj)=>removeFromCart(obj)}
           onAddInFavorite={(item)=> onAddInFavorite(item)}
           onRemoveFavorite = {(obj) => onRemoveFavorite(obj)}
         />}></Route>

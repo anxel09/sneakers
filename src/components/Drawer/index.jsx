@@ -1,17 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styles from "./Drawer.module.scss";
 import axios from "axios";
-const Drawer = function ({ onClickClose }) {
-  const [cartItems, setCartItems] = useState([]);
+const Drawer = function ({
+   onClickClose,
+   setCartItems,
+   cartItems,
+   addState = true,
+   setAddState,
+  }) {
+  // const [cartItems, setCartItems] = useState([]);
   useEffect(() => {
     axios
       .get("https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart")
       .then((resp) => setCartItems(resp.data));
-  }, []);
+  },[]);
 
-  function deleteItem(id) {
-    axios.delete(`https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`);
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  async function deleteItem(id) {
+    setAddState(false)
+    // const id = cartItems.filter((item) => item.imageUrl === obj.imageUrl)[0].id;
+      await axios.delete(
+        `https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`
+      );
+      setCartItems((prev) => prev.filter((item) => item.id !== id));
   }
 
   return (

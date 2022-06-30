@@ -11,21 +11,31 @@ const Card = function ({
   isFavoriteIcon = false,
   onRemoveFavorite,
   favoriteList,
+  cartItems,
 }) {
-  const [isAdded, setIsAdded] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false)
 
-  function onClickAdd() {
-    setIsAdded(!isAdded);
-  }
 
-  
   const item = {
     name:  title,
     price:  price,
     imageUrl:  imageUrl,
   };
   
+
+  function onClickAdd() {
+    const arr = cartItems.find(item => item.imageUrl === imageUrl)
+    if ( arr ){
+      console.log('есть такое')
+      onRemoveAdd(item)
+      return
+    }
+      return addInCart( item )
+
+  }
+
+  
+
   function onClickFavorite(){
     const arr = favoriteList.find(item =>item.imageUrl === imageUrl)
     if ( arr ){
@@ -43,6 +53,15 @@ const Card = function ({
       return "img/favorite-active.svg"
     } 
     return (transmittedState || isFavorite) ? "img/favorite-active.svg" : "img/favorite-inactive.svg"
+  }
+
+  function addSrcState(){
+    const arr = cartItems.find(item =>item.imageUrl === imageUrl)
+    if ( arr ){
+      return "img/btn-added.svg"
+    }
+    return "img/btn-add.svg"
+  
   }
 
   function removeFavorite(item)
@@ -72,17 +91,12 @@ const Card = function ({
         </div>
         <button>
           <img
-            onClick={() => {
-              onClickAdd();
-
-              return !isAdded ?  addInCart( item ) :  onRemoveAdd(item)
-              
-            }}
+            onClick={onClickAdd}
             width={32}
             height={32}
             className={styles.btnAdd}
-            src={isAdded ? "img/btn-added.svg" : "img/btn-add.svg"}
-            alt=""
+            src={addSrcState() }
+            alt="btn"
           />
         </button>
       </div>

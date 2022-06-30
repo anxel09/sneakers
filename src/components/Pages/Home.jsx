@@ -18,12 +18,23 @@ const Home = function ({
     onAddInFavorite,
     onRemoveFavorite,
     favoriteList,
+    cartItems,
+    setCartItems,
+    addState,
+    setAddState,
 }) {
 
   return (
     <div className="wrapper">
       <Header onClickCart={() => setIsCart(true)} />
-      {isCart ? <Drawer onClickClose={() => setIsCart(false)} /> : null}
+      {isCart ? <Drawer
+      onClickClose={() => setIsCart(false)}
+      cartItems ={cartItems}
+      setCartItems = {(data)=>setCartItems(data)}
+      removeFromCart ={(data)=>removeFromCart(data)}
+      setAddState = {(state)=>setAddState(state)}
+      addState = {addState}
+      /> : null}
 
       <div className="content" >
         <div className="content-top">
@@ -62,6 +73,9 @@ const Home = function ({
                 onAddInFavorite={(item)=>onAddInFavorite(item)}
                 onRemoveFavorite = {(obj) => onRemoveFavorite(obj)}
                 favoriteList = {favoriteList}
+                cartItems = {cartItems}
+                addState = {addState}
+                setAddState ={(state)=>setAddState(state)}
               />
             );
           })}

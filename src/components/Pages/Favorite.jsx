@@ -6,6 +6,7 @@ const Favorite = function ({
   addInCart,
   removeFromCart,
 //   onAddInFavorite,
+  cartItems,
   onRemoveFavorite,
 })
 {
@@ -27,12 +28,13 @@ function onAddInFavorite(item){
                 title={val.name}
                 price={val.price}
                 imageUrl={val.imageUrl}
-                addInCart={(obj) => addInCart(obj)}
+                addInCart={(obj)=>console.log(obj)}
                 onRemoveAdd={(obj) => removeFromCart(obj)}
                 onAddInFavorite={(item) => onAddInFavorite(item)}
                 isFavoriteIcon = {true}
                 onRemoveFavorite = {(obj) => onRemoveFavorite(obj)}
                 favoriteList = {favoriteList}
+                cartItems = {cartItems}
               />
             );
           })}
