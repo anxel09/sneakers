@@ -15,7 +15,7 @@ const Drawer = function ({ onClickClose }) {
   }
 
   return (
-    <div className={styles.overlay}>
+    <div className={styles.overlay} >
       <div className={styles.drawer}>
         <h3>
           Корзина{" "}

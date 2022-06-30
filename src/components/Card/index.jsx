@@ -1,7 +1,17 @@
 import { useState } from "react";
 
 import styles from "./Card.module.scss";
-const Card = function (props) {
+const Card = function ({
+  title,
+  price,
+  imageUrl,
+  addInCart,
+  onRemoveAdd,
+  onAddInFavorite,
+  isFavoriteIcon = false,
+  onRemoveFavorite,
+  favoriteList,
+}) {
   const [isAdded, setIsAdded] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false)
 
@@ -9,37 +19,63 @@ const Card = function (props) {
     setIsAdded(!isAdded);
   }
 
+  
+  const item = {
+    name:  title,
+    price:  price,
+    imageUrl:  imageUrl,
+  };
+  
   function onClickFavorite(){
-    setIsFavorite(!isFavorite)
+    const arr = favoriteList.find(item =>item.imageUrl === imageUrl)
+    if ( arr ){
+      removeFavorite(item)
+      setIsFavorite(false)
+      return
+    } 
+    setIsFavorite(!isFavorite);
+    isFavoriteIcon ? removeFavorite(item) : isFavorite ?  removeFavorite(item) :  onAddInFavorite(item);
+  }
+
+  function favoriteState(transmittedState){
+    const arr = favoriteList.find(item =>item.imageUrl === imageUrl)
+    if ( arr ){
+      return "img/favorite-active.svg"
+    } 
+    return (transmittedState || isFavorite) ? "img/favorite-active.svg" : "img/favorite-inactive.svg"
+  }
+
+  function removeFavorite(item)
+  {
+    onRemoveFavorite(item)
   }
 
   return (
-    <div className={styles.item} key={props.imageUrl}>
+    <div className={styles.item} key={imageUrl}>
       <img
         className={styles.favorite}
         width={32}
         height={32}
-        src={isFavorite ?"img/favorite-active.svg" : "img/favorite-inactive.svg"}
+        src={favoriteState(isFavoriteIcon)}
         alt="favorite"
-        onClick={onClickFavorite}
+        onClick={()=>{
+          onClickFavorite()
+          }
+        }
       />
-      <img width={133} height={112} src={props.imageUrl} alt="sneakers" />
-      <p className={styles.title}>{props.title}</p>
+      <img width={133} height={112} src={ imageUrl} alt="sneakers" />
+      <p className={styles.title}>{ title}</p>
       <div className={styles.contentPrice}>
         <div className={styles.contentPriceWrapper}>
           <p>ЦЕНА: </p>
-          <h4 className={styles.price}>{props.price} руб.</h4>
+          <h4 className={styles.price}>{ price} руб.</h4>
         </div>
         <button>
           <img
             onClick={() => {
               onClickAdd();
-              const item = {
-                name: props.title,
-                price: props.price,
-                imageUrl: props.imageUrl,
-              };
-              return !isAdded ? props.onClickAdd( item ) : props.onRemoveAdd(item)
+
+              return !isAdded ?  addInCart( item ) :  onRemoveAdd(item)
               
             }}
             width={32}

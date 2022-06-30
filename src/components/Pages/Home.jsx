@@ -15,6 +15,9 @@ const Home = function ({
     items,
     addInCart,
     removeFromCart,
+    onAddInFavorite,
+    onRemoveFavorite,
+    favoriteList,
 }) {
 
   return (
@@ -22,7 +25,7 @@ const Home = function ({
       <Header onClickCart={() => setIsCart(true)} />
       {isCart ? <Drawer onClickClose={() => setIsCart(false)} /> : null}
 
-      <div className="content">
+      <div className="content" >
         <div className="content-top">
           <h1>
             {changeInput
@@ -54,8 +57,11 @@ const Home = function ({
                 title={val.name}
                 price={val.price}
                 imageUrl={val.imageUrl}
-                onClickAdd={(obj) => addInCart(obj)}
+                addInCart={(obj) => addInCart(obj)}
                 onRemoveAdd={(obj) => removeFromCart(obj)}
+                onAddInFavorite={(item)=>onAddInFavorite(item)}
+                onRemoveFavorite = {(obj) => onRemoveFavorite(obj)}
+                favoriteList = {favoriteList}
               />
             );
           })}
