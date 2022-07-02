@@ -56,14 +56,18 @@ function App() {
   // },[favoriteList])
 
   async function addInCart(obj) {
-    console.log(obj)
-    obj.id = itemCartId;
-    const { data } = await axios.post(
-      "https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart",
-      obj
-    );
-    SetItemCartId(itemCartId + 1);
-    setCartItems((prev) => [...prev, data]);
+    try{
+      obj.id = itemCartId;
+      const { data } = await axios.post(
+        "https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart",
+        obj
+        );
+      SetItemCartId(itemCartId + 1);
+      setCartItems((prev) => [...prev, data]);
+
+    }catch(err){
+      alert('Не удалось добавить')
+    }
   }
 
   async function removeFromCart(obj) {
@@ -130,7 +134,6 @@ function App() {
             />
           }
         >
-          {" "}
         </Route>
         <Route path="/favorite" element={<Favorite
           favoriteList = {favoriteList}

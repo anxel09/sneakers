@@ -34,7 +34,9 @@ body {
   margin: 50px auto;
 }
 
-
+.disable{
+  overflow: hidden;
+}
 
 
 .content{
@@ -76,5 +78,15 @@ body {
     flex-wrap: wrap;
     padding-bottom: 30px;
     
+  }
+}
+
+.sadness{
+  width: 100%;
+  padding: 100px 0;
+  img{
+    width: 70px;
+    height: 70px;
+
   }
 }

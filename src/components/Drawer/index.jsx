@@ -1,23 +1,49 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import styles from "./Drawer.module.scss";
 import axios from "axios";
+import Info from "../Info";
 const Drawer = function ({
    onClickClose,
    setCartItems,
    cartItems,
    addState = true,
    setAddState,
+   totalPrice,
   }) {
-  // const [cartItems, setCartItems] = useState([]);
+
+    const [orderCount, setOrderCount] = useState(0)
+    const [isOrder, setIsOrder] = useState(false)
+
   useEffect(() => {
     axios
       .get("https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart")
       .then((resp) => setCartItems(resp.data));
   },[]);
 
+  async function makeOrder(){
+    try{
+      const {data} = await axios.post('https://62b9cbe5ff109cd1dc9b5328.mockapi.io/order',{items: cartItems})
+      for (let i = 0; i < cartItems.length; i++) {
+        const element = cartItems[i];
+        await axios.delete(`https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${element.id}`)
+        function delay(ms){
+          setTimeout(()=>true,ms)
+        }
+        setOrderCount(data.id)
+        setIsOrder(true)
+        delay(1000)
+      }
+      
+      setCartItems([])
+
+    }catch(error){
+      alert('Не удалось совершить покупку :(')
+    }
+  }
+
+
   async function deleteItem(id) {
     setAddState(false)
-    // const id = cartItems.filter((item) => item.imageUrl === obj.imageUrl)[0].id;
       await axios.delete(
         `https://62b9cbe5ff109cd1dc9b5328.mockapi.io/cart/${id}`
       );
@@ -29,7 +55,7 @@ const Drawer = function ({
       <div className={styles.drawer}>
         <h3>
           Корзина{" "}
-          <img onClick={onClickClose} src="img/btn-remove.svg" alt="remove" />
+          <img onClick={()=>{onClickClose();setIsOrder(false)}} src="img/btn-remove.svg" alt="remove" />
         </h3>
         {cartItems.length > 0 ? (
           <div>
@@ -64,26 +90,28 @@ const Drawer = function ({
               <div className={styles.finally}>
                 <p>Итого:</p>
                 <span></span>
-                <h5 className={styles.finallyPrice}>21498 руб.</h5>
+                <h5 className={styles.finallyPrice}>{totalPrice} руб.</h5>
               </div>
               <div className={styles.tax}>
                 <p>Налог 5%</p>
                 <span></span>
-                <h5 className={styles.taxPrice}>214928 руб.</h5>
+                <h5 className={styles.taxPrice}>{(totalPrice * 1.05).toFixed(2)} руб.</h5>
               </div>
-              <button className={styles.makeOrder}>
+              <button className={styles.makeOrder} onClick={makeOrder}>
                 <p>Оформить заказ</p>
                 <img src="img/arrow-right.svg" alt="arrow" />
               </button>
             </div>
           </div>
         ) : (
-          <div className={styles.emptyCart}>
-            <img width={120} height={120} src="img/cart_empty.png" alt="cart" />
-            <h3>Корзина пустая</h3>
-            <p>Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-            <button onClick={onClickClose}>Вернуться назад</button>
-          </div>
+          <>
+            <Info
+            title={ isOrder ? "Заказ оформлен!" :"Корзина Пустая"}
+            description={ isOrder ? `Ваш заказ #${orderCount} скоро будет передан курьерской доставке` :"Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."}
+            image={ isOrder ? 'img/order.jpg':'img/cart_empty.png'}
+            />
+            <button className={styles.backAway} onClick={()=>{onClickClose();setIsOrder(false)}}>Вернуться назад</button>
+          </>
         )}
       </div>
     </div>

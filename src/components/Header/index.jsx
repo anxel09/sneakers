@@ -18,7 +18,7 @@ const Header = function(props){
         <ul className={styles.headerRight}>
           <li onClick={props.onClickCart}>
             <img width={20} height={20} src="img/cart.svg" alt="" />
-            <p className={styles.headerPrice}>1205 руб</p>
+            <p className={styles.headerPrice}>{props.totalPrice} руб</p>
           </li>
           <li>
             <Link to={'/favorite'}><img width={20} height={20} src="img/heart.svg" alt="" /></Link>

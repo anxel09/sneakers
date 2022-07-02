@@ -1,6 +1,7 @@
 import Header from "../Header";
 import Drawer from "../Drawer";
 import Card from "../Card";
+import { useEffect, useState } from "react";
 
 
 
@@ -23,17 +24,35 @@ const Home = function ({
     addState,
     setAddState,
 }) {
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [scrollY, setScrollY] = useState(false)
+
+  useEffect(()=>{
+      setTotalPrice(()=> cartItems.reduce((prev,cur) => prev+cur.price,0))
+  },[cartItems])
+
+  useEffect(()=>{
+    scrollY ? (document.body.style.overflowY = 'hidden') : (document.body.style.overflowY = 'auto') 
+  },[scrollY])
 
   return (
-    <div className="wrapper">
-      <Header onClickCart={() => setIsCart(true)} />
+    <div className={'wrapper'}>
+      <Header totalPrice={totalPrice} onClickCart={() => {
+        setIsCart(true)
+        setScrollY(true)
+        }} />
       {isCart ? <Drawer
-      onClickClose={() => setIsCart(false)}
+      onClickClose={() => {
+        setIsCart(false)
+        setScrollY(false)  
+      }
+      }
       cartItems ={cartItems}
       setCartItems = {(data)=>setCartItems(data)}
       removeFromCart ={(data)=>removeFromCart(data)}
       setAddState = {(state)=>setAddState(state)}
       addState = {addState}
+      totalPrice ={totalPrice}
       /> : null}
 
       <div className="content" >

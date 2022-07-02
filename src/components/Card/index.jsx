@@ -26,7 +26,6 @@ const Card = function ({
   function onClickAdd() {
     const arr = cartItems.find(item => item.imageUrl === imageUrl)
     if ( arr ){
-      console.log('есть такое')
       onRemoveAdd(item)
       return
     }
